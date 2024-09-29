@@ -1,10 +1,14 @@
-const express = require("express");
-
 //process.env object is globally available from .env file in a nodejs environment
 require("dotenv").config();
 
+const express = require("express");
+const workoutRoutes = require("./routes/workouts");
+
 //creates an express app and stores it in app
 const app = express();
+
+//looks for the body of a request (Data for the server)
+app.use(express.json());
 
 //this function is fired for every request that comes in
 //"global middleware"
@@ -13,11 +17,8 @@ app.use((req, res, next) => {
   next();
 });
 
-//respond for incoming get requests
-app.get("/", (req, res) => {
-  //response
-  res.json({ mssg: "Welcome to the app" });
-});
+//grabs all different routes attached to the router and uses them on the app
+app.use("/api/workouts", workoutRoutes);
 
 //listen for requests
 app.listen(process.env.PORT, () => {
