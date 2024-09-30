@@ -44,11 +44,54 @@ const createWorkout = async (req, res) => {
 };
 
 //DELETE a workout
+const deleteWorkout = async (req, res) => {
+  const { id } = req.params;
+
+  //checking if workout exists in DB
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "no such workout" });
+  }
+
+  const deleteWorkout = await Workout.findOneAndDelete({ _id: id });
+  //in mongodb the id is specified like _id, therefore the object is necessary
+
+  //if singleWorout is null (not existent) fire this:
+  if (!deleteWorkout) {
+    return res.status(400).json({ error: "No such workout exists" });
+    // return is necessary to abort here and don't fire the following code
+  }
+
+  res.status(200).json(deleteWorkout);
+};
 
 //PATCH a workout
+const updateWorkout = async (req, res) => {
+  const { id } = req.params;
+
+  //checking if workout exists in DB
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: "no such workout" });
+  }
+
+  const workout = await Workout.findOneAndUpdate(
+    { _id: id },
+    {
+      ...req.body,
+    }
+  );
+  //if singleWorout is null (not existent) fire this:
+  if (!workout) {
+    return res.status(400).json({ error: "No such workout exists" });
+    // return is necessary to abort here and don't fire the following code
+  }
+
+  res.status(200).json(workout);
+};
 
 module.exports = {
   createWorkout,
   getAllWorkouts,
   getSingleWorkout,
+  deleteWorkout,
+  updateWorkout,
 };
