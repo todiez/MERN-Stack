@@ -34,6 +34,24 @@ const getSingleWorkout = async (req, res) => {
 const createWorkout = async (req, res) => {
   const { title, load, reps } = req.body;
 
+  //detect whicht fields are empty if not all are filled out
+  let emptyFields = [];
+  if (!title) {
+    emptyFields.push("title");
+  }
+  if (!load) {
+    emptyFields.push("load");
+  }
+  if (!reps) {
+    emptyFields.push("reps");
+  }
+  console.log("EmptyFields Array: ", emptyFields)
+  if (emptyFields.length > 0) {
+    return res
+      .status(400)
+      .json({ error: "Please fill in all fields", emptyFields });
+  }
+
   //adding a document to db
   try {
     const workout = await Workout.create({ title, load, reps });
