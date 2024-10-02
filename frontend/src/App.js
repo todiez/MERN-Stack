@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-//pages and components
+// pages & components
 import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 
@@ -10,7 +10,6 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <div className="pages">
-          {/* div for styling only */}
           <Routes>
             <Route path="/" element={<Home />} />
           </Routes>

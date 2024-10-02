@@ -1,40 +1,35 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useWorkoutsContext } from "../hooks/useWorkoutsContext";
 
-//components
+// components
 import WorkoutDetails from "../components/WorkoutDetails";
-import WorkoutForm from "../components/WorktoutForm";
+import WorkoutForm from "../components/WorkoutForm";
 
 const Home = () => {
-  const [workouts, setWorkouts] = useState(null);
+  const { workouts, dispatch } = useWorkoutsContext();
 
   useEffect(() => {
-    //useEffect is fired at every render but I need it only once, so an empty array needed
-
     const fetchWorkouts = async () => {
       const response = await fetch("/api/workouts");
-
-      //parse the json response into something to work with, array of (workout) objects:
       const json = await response.json();
-      console.log(json);
 
       if (response.ok) {
-        setWorkouts(json);
+        dispatch({ type: "SET_WORKOUTS", payload: json });
       }
     };
 
-    //main function inside use effect async is bad, therefore second function and calling it
     fetchWorkouts();
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="home">
       <div className="workouts">
         {workouts &&
           workouts.map((workout) => (
-            <WorkoutDetails key={workout._id} workout={workout} />
+            <WorkoutDetails workout={workout} key={workout._id} />
           ))}
       </div>
-      {<WorkoutForm />}
+      <WorkoutForm />
     </div>
   );
 };
