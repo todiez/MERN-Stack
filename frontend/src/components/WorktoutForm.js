@@ -6,6 +6,10 @@ const WorkoutForm = () => {
   const [reps, setReps] = useState("");
   const [error, setError] = useState(null);
 
+
+
+  //react context is kind of a global state
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
